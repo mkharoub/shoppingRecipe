@@ -1,4 +1,4 @@
-<a href="#" class="list-group-item clearfix" *ngIf="recipe" (click)="onRecipeSelected()">
+<a [routerLink]="[recipe.id]" [routerLinkActive]="'active'" class="list-group-item clearfix" *ngIf="recipe">
   <div class="float-start">
     <h4>{{recipe.name}}</h4>
     <p>{{recipe.description}}</p>

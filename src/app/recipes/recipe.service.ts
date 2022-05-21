@@ -1,4 +1,5 @@
-import {EventEmitter, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
+
 import {Recipe} from "./recipe.model";
 import {Ingredient} from "../shared/ingredient.model";
 
@@ -6,10 +7,9 @@ import {Ingredient} from "../shared/ingredient.model";
   providedIn: 'root'
 })
 export class RecipeService {
-  recipeSelected = new EventEmitter<Recipe>();
-
   private recipes: Recipe[] = [
     new Recipe(
+      1,
       'Test Recipe1',
       'This is a simple recipe test!',
       'https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&resize=556,505',
@@ -19,6 +19,7 @@ export class RecipeService {
       ]
     ),
     new Recipe(
+      2,
       'Test Recipe2',
       'This is a simple recipe test!',
       'https://www.simplyrecipes.com/thmb/JWjdE8YwikAae0KZuyy6ZJW7Utw=/3000x2001/filters:no_upscale():max_bytes(150000):strip_icc()/Simply-Recipes-Homemade-Pizza-Dough-Lead-Shot-1c-c2b1885d27d4481c9cfe6f6286a64342.jpg',
@@ -29,9 +30,16 @@ export class RecipeService {
     ),
   ];
 
-  constructor() { }
+  constructor() {
+  }
 
   getRecipes() {
     return this.recipes.slice();
+  }
+
+  getRecipe(id: number) {
+    return this.recipes.find((recipe: Recipe) => {
+      return recipe.id === id;
+    });
   }
 }
