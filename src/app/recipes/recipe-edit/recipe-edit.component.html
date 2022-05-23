@@ -1,1 +1,56 @@
-hi there!
+<div class="row">
+  <div class="col-12">
+    <form *ngIf="recipeForm" [formGroup]="recipeForm" (ngSubmit)="onSubmit()">
+      <div class="row mb-2">
+        <div class="col-12">
+          <button class="btn btn-success" type="submit" [disabled]="recipeForm.invalid">
+            {{editMode ? 'Update' : 'Save'}}
+          </button>
+          <button class="btn btn-danger" type="button" (click)="onCancel()">Cancel</button>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-12">
+          <label for="name">Name</label>
+          <input type="text" class="form-control" id="name" [formControlName]="'name'" #name>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-12">
+          <label for="imagePath">Image Path</label>
+          <input type="text" class="form-control" id="imagePath" formControlName="imagePath" #imagePath>
+        </div>
+        <div class="col-12 mt-1">
+          <div style="max-height: 100px; max-width: 100px">
+            <img src="{{imagePath.value}}" alt="{{name.value}}" class="img-fluid">
+          </div>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-12">
+          <label for="description">Description</label>
+          <textarea type="text" class="form-control" id="description" rows="6" formControlName="description"></textarea>
+        </div>
+      </div>
+      <div class="row mb-2" formArrayName="ingredients">
+        <div class="col-12">
+          <div class="d-flex align-items-center justify-content-between mb-1">
+            <label>Ingredients</label>
+            <button class="btn btn-outline-primary" (click)="onAddIngredient()" type="button">+</button>
+          </div>
+          <div class="row mb-2" *ngFor="let ingredientCtrl of ingredientControls; let i = index" [formGroupName]="i">
+            <div class="col-8">
+              <input type="text" class="form-control" [formControlName]="'name'">
+            </div>
+            <div class="col-2">
+              <input type="number" class="form-control" formControlName="amount">
+            </div>
+            <div class="col-2 text-end">
+              <button type="button" class="btn btn-danger" (click)="onDeleteIngredient(i)">X</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
