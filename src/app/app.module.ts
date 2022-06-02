@@ -6,9 +6,6 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {HeaderComponent} from './header/header.component';
 import {AuthInterceptor} from "./auth/auth.interceptor";
-import {RecipesModule} from "./recipes/recipes.module";
-import {ShoppingListModule} from "./shopping-list/shopping-list.module";
-import {AuthModule} from "./auth/auth.module";
 import {SharedModule} from "./shared/shared.module";
 
 @NgModule({
@@ -21,9 +18,6 @@ import {SharedModule} from "./shared/shared.module";
     AppRoutingModule,
     HttpClientModule,
     SharedModule,
-    RecipesModule,
-    ShoppingListModule,
-    AuthModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]
