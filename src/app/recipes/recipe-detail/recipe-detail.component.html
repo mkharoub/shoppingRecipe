@@ -13,9 +13,9 @@
 <div class="row mb-2">
   <div class="col-12">
     <div class="btn-group">
-      <button type="button" class="btn btn-primary dropdown-toggle">Manege Recipe
+      <button type="button" class="btn btn-primary dropdown-toggle" appDropdown #r="appDropdown">Manege Recipe
       </button>
-      <ul class="dropdown-menu">
+      <ul class="dropdown-menu" [ngClass]="{'show': r.isOpen}">
         <li><a class="dropdown-item" (click)="onAddToShoppingList()">To Shopping List</a></li>
         <li><a [routerLink]="['edit']" class="dropdown-item">Edit Recipe</a></li>
         <li><a class="dropdown-item" (click)="onDeleteRecipe()">Delete Recipe</a></li>
