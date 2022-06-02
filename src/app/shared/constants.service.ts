@@ -17,9 +17,7 @@ export class ConstantsService {
   constructor() {
   }
 
-  getErrorMessage(key?: string): string {
-    key = key || 'DEFAULT';
-
-    return this.errors[key];
+  getErrorMessage(key: string): string {
+    return this.errors[key] || this.errors['DEFAULT'];
   }
 }

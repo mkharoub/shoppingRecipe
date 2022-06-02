@@ -38,7 +38,7 @@ export class AuthService {
     }
 
     return this.http.post<SignInResponse>(this.signInEndPoint, body, options).pipe(
-      catchError(this.handleError),
+      catchError(this.handleError.bind(this)),
       tap(response => this.handleAuthUser(response.email, response.localId, response.idToken, response.expiresIn))
     );
   }
@@ -57,7 +57,7 @@ export class AuthService {
     };
 
     return this.http.post<SignUpResponse>(this.signUpEndPoint, body, options).pipe(
-      catchError(this.handleError),
+      catchError(this.handleError.bind(this)),
       tap(response => this.handleAuthUser(response.email, response.localId, response.idToken, response.expiresIn))
     );
   }
