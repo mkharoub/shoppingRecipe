@@ -6,6 +6,7 @@ import {Router} from "@angular/router";
 import {SignInResponse, SignUpResponse} from "./auth.model";
 import {ConstantsService} from "../shared/constants.service";
 import {User} from "./user.model";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,6 @@ import {User} from "./user.model";
 export class AuthService {
   private signUpEndPoint = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp';
   private signInEndPoint = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword';
-  private firebaseApiKey = 'AIzaSyDgzeg1PeemoCx8bITmYYx1xv6aTwHEaY0';
   private autoLogoutTimerId: any = null;
 
   user = new BehaviorSubject<User | null>(null);
@@ -33,7 +33,7 @@ export class AuthService {
 
     const options = {
       params: {
-        key: this.firebaseApiKey
+        key: environment.firebaseApiKey
       }
     }
 
@@ -52,7 +52,7 @@ export class AuthService {
 
     const options = {
       params: {
-        key: this.firebaseApiKey
+        key: environment.firebaseApiKey
       }
     };
 
