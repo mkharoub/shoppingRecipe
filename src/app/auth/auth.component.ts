@@ -1,9 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {Router} from "@angular/router";
+import {Store} from "@ngrx/store";
 
 import {AuthService} from "./auth.service";
 import {SignInResponse, SignUpResponse} from "./auth.model";
+import * as fromApp from '../store/app.reducer';
 
 @Component({
   selector: 'app-auth',
@@ -15,7 +17,7 @@ export class AuthComponent implements OnInit {
   isLoading = false;
   error = '';
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router, private store: Store<fromApp.AppState>) {
   }
 
   ngOnInit(): void {
