@@ -1,10 +1,12 @@
 import {Injectable} from "@angular/core";
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from "@angular/router";
 import {Store} from "@ngrx/store";
-import {take} from "rxjs/operators";
+import {switchMap, take} from "rxjs/operators";
+import {Observable, of} from "rxjs";
 
 import {DataStorageService} from "../shared/data-storage.service";
 import * as fromApp from "../store/app.reducer";
+import {Recipe} from "./recipe.model";
 
 /**
  * We used this resolver to load recipes even if we on the recipe details route.
@@ -12,17 +14,22 @@ import * as fromApp from "../store/app.reducer";
  */
 
 @Injectable({providedIn: 'root'})
-export class RecipesResolverService implements Resolve<any> {
+export class RecipesResolverService implements Resolve<Recipe[]> {
   constructor(
     private dataStorageService: DataStorageService,
     private store: Store<fromApp.AppState>) {
   }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): any {
-    this.store.select('recipe').pipe(take(1)).subscribe(recipeState => {
-      if (!recipeState.recipes.length) {
-        this.dataStorageService.fetchRecipes().pipe(take(1)).subscribe();
-      }
-    });
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Recipe[]> | Promise<Recipe[]> | Recipe[] {
+    return this.store.select('recipe').pipe(
+      take(1),
+      switchMap(recipeState => {
+        if (recipeState.recipes.length) {
+          return of(recipeState.recipes);
+        }
+
+        return this.dataStorageService.fetchRecipes();
+      })
+    )
   }
 }

@@ -28,6 +28,10 @@ export class RecipeEditComponent implements OnInit {
         this.id = +params['id'];
         this.editMode = !isNaN(this.id);
 
+        if (this.editMode) {
+          this.store.dispatch(new RecipeActions.SetRecipe(this.id));
+        }
+
         this.initForm();
       }
     );
