@@ -25,7 +25,7 @@ export class AuthInterceptor implements HttpInterceptor {
    *
    * take(1) --> this.store.select('auth').subscribe().unsubscribe();
    *
-   * exhaustMap operator, once we have one the observable, and we need to return one at the end. lecture 302
+   * exhaustMap operator, once we have more than one the observable, and we need to return one at the end. lecture 302
    * @param request
    * @param next
    */
