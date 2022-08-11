@@ -3,12 +3,10 @@ import {Recipe} from "../recipe.model";
 
 export interface State {
   recipes: Recipe[];
-  selectedRecipe: Recipe | null;
 }
 
 const initialState: State = {
-  recipes: [],
-  selectedRecipe: null
+  recipes: []
 }
 
 export const recipeReducer = (state = initialState, action: RecipeActions.RecipeActions) => {
@@ -18,35 +16,25 @@ export const recipeReducer = (state = initialState, action: RecipeActions.Recipe
         ...state,
         recipes: action.payload.slice()
       }
-    case RecipeActions.SET_RECIPE:
-      return {
-        ...state,
-        selectedRecipe: {...state.recipes[action.payload]}
-      }
     case RecipeActions.DELETE_RECIPE:
       const recipesToDelete = state.recipes.slice();
       recipesToDelete.splice(action.payload, 1)
 
       return {
         ...state,
-        recipes: recipesToDelete,
-        selectedRecipe: null
+        recipes: recipesToDelete
       }
     case RecipeActions.UPDATE_RECIPE:
       const recipesToUpdate = state.recipes.slice();
       recipesToUpdate[action.payload.index] = action.payload.recipe;
       return {
         ...state,
-        recipes: recipesToUpdate,
-        selectedRecipe: recipesToUpdate[action.payload.index]
+        recipes: recipesToUpdate
       }
     case RecipeActions.ADD_RECIPE:
-      const recipesToAdd = state.recipes.slice();
-      recipesToAdd.push(action.payload);
-
       return {
         ...state,
-        recipes: recipesToAdd
+        recipes: [...state.recipes, action.payload]
       }
     default:
       return state;

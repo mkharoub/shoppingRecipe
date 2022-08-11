@@ -1,20 +1,23 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Store} from "@ngrx/store";
 
 import * as fromApp from "../../store/app.reducer";
 import * as RecipeActions from "../store/recipe.actions";
+import {map} from "rxjs/operators";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-recipe-edit',
   templateUrl: './recipe-edit.component.html',
   styleUrls: ['./recipe-edit.component.scss']
 })
-export class RecipeEditComponent implements OnInit {
+export class RecipeEditComponent implements OnInit, OnDestroy {
   id: number | undefined;
   editMode = false;
   recipeForm: FormGroup | undefined;
+  storeSub: Subscription | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -27,14 +30,13 @@ export class RecipeEditComponent implements OnInit {
       (params: Params) => {
         this.id = +params['id'];
         this.editMode = !isNaN(this.id);
-
-        if (this.editMode) {
-          this.store.dispatch(new RecipeActions.SetRecipe(this.id));
-        }
-
         this.initForm();
       }
     );
+  }
+
+  ngOnDestroy() {
+    this.storeSub?.unsubscribe();
   }
 
   private initForm() {
@@ -44,15 +46,19 @@ export class RecipeEditComponent implements OnInit {
     let ingredients = new FormArray([]);
 
     if (this.editMode) {
-      this.store.select('recipe').subscribe(recipeState => {
-        const editedRecipe = recipeState.selectedRecipe;
+      this.storeSub = this.store.select('recipe').pipe(
+        map(recipeState => {
+          return recipeState.recipes.find((recipe, index) => {
+            return index === this.id;
+          })
+        }),
+      ).subscribe(recipe => {
+        name = recipe?.name;
+        description = recipe?.description;
+        imagePath = recipe?.imagePath;
 
-        name = editedRecipe?.name;
-        description = editedRecipe?.description;
-        imagePath = editedRecipe?.imagePath;
-
-        if (editedRecipe?.ingredients) {
-          for (let ingredient of editedRecipe.ingredients) {
+        if (recipe?.ingredients) {
+          for (let ingredient of recipe.ingredients) {
             ingredients.push(
               new FormGroup({
                 'name': new FormControl(ingredient.name, [Validators.required]),

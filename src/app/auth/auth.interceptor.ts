@@ -6,7 +6,7 @@ import {
   HttpInterceptor,
   HttpParams
 } from '@angular/common/http';
-import {exhaustMap, Observable} from 'rxjs';
+import {Observable, switchMap} from 'rxjs';
 import {map, take} from "rxjs/operators";
 import {Store} from "@ngrx/store";
 
@@ -33,7 +33,7 @@ export class AuthInterceptor implements HttpInterceptor {
     return this.store.select('auth').pipe(
       take(1),
       map(authState => authState.user),
-      exhaustMap(user => {
+      switchMap(user => {
         if (!user) {
           return next.handle(request);
         }

@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from "@angular/router";
 import {Store} from "@ngrx/store";
-import {switchMap, take} from "rxjs/operators";
+import {exhaustMap, map, take} from "rxjs/operators";
 import {Observable, of} from "rxjs";
 
 import {DataStorageService} from "../shared/data-storage.service";
@@ -23,9 +23,10 @@ export class RecipesResolverService implements Resolve<Recipe[]> {
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Recipe[]> | Promise<Recipe[]> | Recipe[] {
     return this.store.select('recipe').pipe(
       take(1),
-      switchMap(recipeState => {
-        if (recipeState.recipes.length) {
-          return of(recipeState.recipes);
+      map(recipeState => recipeState.recipes),
+      exhaustMap(recipes => {
+        if (recipes.length) {
+          return of(recipes);
         }
 
         return this.dataStorageService.fetchRecipes();
